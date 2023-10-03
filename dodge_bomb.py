@@ -41,9 +41,12 @@ def main():
     vx, vy = 0, 0
     vx += 5
     vy += 5
-
-
-
+    bb_imgs = []
+    for r in range(1, 11):
+        bb_img = pg.Surface((20*r, 20*r))
+        pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)
+        bb_img.set_colorkey((0, 0, 0))
+        bb_imgs.append(bb_img)
 
     clock = pg.time.Clock()
     tmr = 0
@@ -67,8 +70,9 @@ def main():
                 sum_move[0] += mv[0]
                 sum_move[1] += mv[1]
 
-        accs = [a for a in range(1, 11)]
-        avx, avy = vx*accs[min(tmr//500, 9)], vy*accs[min(tmr//500, 9)]
+        accs = [a for a in range(1, 11)] #爆弾の加速度のリスト
+        avx, avy = vx*accs[min(tmr//500, 9)], vy*accs[min(tmr//500, 9)] #爆弾のスピードが速くなる
+        bb_img = bb_imgs[min(tmr//500, 9)]
 
         kk_rct.move_ip(sum_move[0], sum_move[1])
         if cheak_bound(kk_rct) != (True, True):
@@ -80,7 +84,7 @@ def main():
             vx*= -1
         if not tate:
             vy *= -1
-        screen.blit(bd_img, bd_rct)
+        screen.blit(bb_img, bd_rct)
 
         pg.display.update()
         tmr += 1
