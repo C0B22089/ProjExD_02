@@ -10,6 +10,8 @@ delta = {
     pg.K_LEFT: (-5, 0),
     pg.K_RIGHT: (+5, 0)
 }
+
+
 def cheak_bound(obj_rct: pg.Rect):
     """ 引数：こうかとんレクト＆爆弾レクト
     戻り値：タプル（横方向の判定結果、縦方向の判定結果"""
@@ -42,6 +44,7 @@ def main():
 
 
 
+
     clock = pg.time.Clock()
     tmr = 0
     while True:
@@ -63,14 +66,18 @@ def main():
             if key_list[key]:
                 sum_move[0] += mv[0]
                 sum_move[1] += mv[1]
+
+        accs = [a for a in range(1, 11)]
+        avx, avy = vx*accs[min(tmr//500, 9)], vy*accs[min(tmr//500, 9)]
+
         kk_rct.move_ip(sum_move[0], sum_move[1])
         if cheak_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_move[0], -sum_move[1])
         screen.blit(kk_img, kk_rct)
-        bd_rct.move_ip(vx, vy)
+        bd_rct.move_ip(avx, avy)
         yoko, tate = cheak_bound(bd_rct)
         if not yoko:
-            vx *= -1
+            vx*= -1
         if not tate:
             vy *= -1
         screen.blit(bd_img, bd_rct)
