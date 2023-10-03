@@ -5,7 +5,7 @@ import random
 
 WIDTH, HEIGHT = 1600, 900
 delta = {
-    pg.K_UP: (0,-5),
+    pg.K_UP: (0, -5),
     pg.K_DOWN: (0, +5),
     pg.K_LEFT: (-5, 0),
     pg.K_RIGHT: (+5, 0)
@@ -25,7 +25,9 @@ def main():
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
     kk_img = pg.image.load("ex02/fig/3.png")
+    kk_img2 = pg.image.load("ex02/fig/8.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
+    kk_img2 = pg.transform.rotozoom(kk_img2, 0, 2.0)
     kk_rct = kk_img.get_rect()
     kk_rct.center = (900, 400)
     bd_img = pg.Surface((20, 20))
@@ -48,6 +50,9 @@ def main():
                 return
         if kk_rct.colliderect(bd_rct):
             print("ゲームオーバ")
+            screen.blit(bg_img, [0, 0])
+            screen.blit(kk_img2, kk_rct)
+            pg.display.update()
             return
 
         screen.blit(bg_img, [0, 0])
