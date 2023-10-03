@@ -27,9 +27,9 @@ def main():
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
     kk_img = pg.image.load("ex02/fig/3.png")
-    kk_img2 = pg.image.load("ex02/fig/8.png")
+    kk_img2 = pg.image.load("ex02/fig/8.png") #こうかとんの泣き顔をロード
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
-    kk_img2 = pg.transform.rotozoom(kk_img2, 0, 2.0)
+    kk_img2 = pg.transform.rotozoom(kk_img2, 0, 2.0) #泣き顔のサイズ変更
     kk_rct = kk_img.get_rect()
     kk_rct.center = (900, 400)
     bd_img = pg.Surface((20, 20))
@@ -42,6 +42,10 @@ def main():
     vx += 5
     vy += 5
     bb_imgs = []
+
+    """
+    爆弾の拡大処理
+    """
     for r in range(1, 11):
         bb_img = pg.Surface((20*r, 20*r))
         pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)
@@ -54,6 +58,10 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
+            
+        """
+        ゲームオーバになった時にこうかとんが泣き顔になる
+        """
         if kk_rct.colliderect(bd_rct):
             print("ゲームオーバ")
             screen.blit(bg_img, [0, 0])
@@ -62,7 +70,7 @@ def main():
             return
 
         screen.blit(bg_img, [0, 0])
-        """こうかとん"""
+        """こうかとんを移動させる処理"""
         key_list = pg.key.get_pressed()
         sum_move = [0, 0]
         for key, mv in delta.items():
@@ -70,10 +78,16 @@ def main():
                 sum_move[0] += mv[0]
                 sum_move[1] += mv[1]
 
+        """
+        爆弾の加速をするための処理
+        """
         accs = [a for a in range(1, 11)] #爆弾の加速度のリスト
         avx, avy = vx*accs[min(tmr//500, 9)], vy*accs[min(tmr//500, 9)] #爆弾のスピードが速くなる
         bb_img = bb_imgs[min(tmr//500, 9)]
 
+        """
+        こうかとんと爆弾が画面から出ないようにするための処理
+        """
         kk_rct.move_ip(sum_move[0], sum_move[1])
         if cheak_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_move[0], -sum_move[1])
